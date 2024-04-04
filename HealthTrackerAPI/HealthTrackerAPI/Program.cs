@@ -1,5 +1,5 @@
 using HealthTrackerAPI.Models;
-using HealthTrackerAPI.Repositories;
+using HealthTrackerAPI.Services;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);

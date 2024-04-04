@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace HealthTrackerAPI.Repositories;
+namespace HealthTrackerAPI.Services;
 
 public class SymptomService : ISymptomService
 {
@@ -23,7 +23,7 @@ public class SymptomService : ISymptomService
 
     public async Task<Symptom> GetSymptomByIdAsync(string symptomId)
     {
-        var objectId = ObjectId.Parse(symptomId); // Konwertuj string na ObjectId
+        var objectId = ObjectId.Parse(symptomId); 
 
         return await _symptomsCollection.Find(x => x.Id == objectId).FirstOrDefaultAsync();
     }
@@ -42,15 +42,11 @@ public class SymptomService : ISymptomService
        await _symptomsCollection.InsertOneAsync(symptom);
        return symptom;
     }
-
-    // public Task<ReplaceOneResult> UpdateSymptomAsync(string symptomId, Symptom symptom)
-    // {
-    //     throw new NotImplementedException();
-    // }
+    
 
     public async Task<DeleteResult> DeleteSymptomAsync(string symptomId)
     {
-        var objectId = ObjectId.Parse(symptomId); // Konwertuj string na ObjectId
+        var objectId = ObjectId.Parse(symptomId); 
         return await _symptomsCollection.DeleteOneAsync(x => x.Id == objectId);
     }
     
@@ -88,36 +84,10 @@ public class SymptomService : ISymptomService
         {
             throw new Exception("Symptom not found");
         }
-        // if (oldSymptom != null)
-        // {
-        //     if (oldSymptom.SeverityScale != updatedSymptom.SeverityScale)
-        //     {
-        //         await SaveSymptomHistoryAsync(objectId, "SeverityScale", oldSymptom.SeverityScale.ToString(), updatedSymptom.SeverityScale.ToString());
-        //     }
-        //
-        //     if (oldSymptom.SymptomDurationHours != updatedSymptom.SymptomDurationHours)
-        //     {
-        //         await SaveSymptomHistoryAsync(objectId, "SymptomDurationHours", oldSymptom.SymptomDurationHours.ToString(), updatedSymptom.SymptomDurationHours.ToString());
-        //     }
-        //     
-        //     
-        //
-        //     // Update symptom fields
-        //     oldSymptom.SeverityScale = updatedSymptom.SeverityScale;
-        //     oldSymptom.SymptomDurationHours = updatedSymptom.SymptomDurationHours;
-        //
-        //     // Save changes to symptoms collection
-        //     await _symptomsCollection.ReplaceOneAsync(filter, oldSymptom);
-        // }
-        // else
-        // {
-        //     throw new Exception("Symptom not found");
-        // }
     }
 
     private async Task SaveSymptomHistoryAsync(ObjectId symptomId, string fieldName, string oldValue, string newValue)
     {
-        //var objectId = ObjectId.Parse(symptomId); // Konwertuj string na ObjectId
 
         var history = new SymptomHistory
         {
@@ -138,10 +108,9 @@ public class SymptomService : ISymptomService
 
     public async Task<List<SymptomHistory>> GetSymptomHistoryByIdAsync(string symptomId)
     {
-        var objectId = ObjectId.Parse(symptomId); // Konwertuj string na ObjectId
+        var objectId = ObjectId.Parse(symptomId); 
         var filter = Builders<SymptomHistory>.Filter.Eq(s => s.SymptomId, objectId);
         var histories = await _symptomHistoryCollection.Find(filter).ToListAsync();
-        //return await _symptomHistoryCollection.Find(x => x.SymptomId == objectId).FirstOrDefaultAsync();
         return histories.Select(h => new SymptomHistory
         {
             FieldName = h.FieldName,
@@ -150,80 +119,4 @@ public class SymptomService : ISymptomService
             ModifiedDate = h.ModifiedDate
         }).ToList();
     }
-
-    // public async Task<ReplaceOneResult> UpdateSymptomAsync(string symptomId, Symptom symptom)
-    // {
-    //     return await _symptomsCollection.ReplaceOneAsync(x => x.Id == symptomId, symptom);
-    // }
-
-    
-    // public async Task UpdateSymptomAsync(string symptomId, Symptom updatedSymptom)
-    // {
-    //     var objectId = ObjectId.Parse(symptomId); // Konwertuj string na ObjectId
-    //
-    //
-    //     var filter = Builders<Symptom>.Filter.Eq(s => s.Id, objectId);
-    //     var oldSymptom = await _symptomsCollection.Find(filter).FirstOrDefaultAsync();
-    //
-    //     if (oldSymptom != null)
-    //     {
-    //         var modifiedFields = CompareSymptoms(oldSymptom, updatedSymptom);
-    //
-    //         // Update symptom fields
-    //         oldSymptom.SeverityScale = updatedSymptom.SeverityScale;
-    //         //oldSymptom.SymptomDurationHours = updatedSymptom.SymptomDurationHours;
-    //        
-    //         // Save changes to symptoms collection
-    //         await _symptomsCollection.ReplaceOneAsync(filter, oldSymptom);
-    //
-    //         // Save changes to symptom history
-    //         await SaveSymptomHistoryAsync(objectId, oldSymptom, updatedSymptom);
-    //     }
-    //     else
-    //     {
-    //         throw new Exception("Symptom not found");
-    //     }
-    // }
-    //
-    // private async Task SaveSymptomHistoryAsync(ObjectId symptomId, Symptom oldSymptom, Symptom updatedSymptom)
-    // {
-    //     var modifiedFields = CompareSymptoms(oldSymptom, updatedSymptom);
-    //
-    //     var history = new SymptomHistory
-    //     {
-    //         SymptomId = symptomId,
-    //         FieldName = modifiedFields,
-    //         OldValue = GetValueByFieldName(oldSymptom, modifiedFields),
-    //         NewValue = GetValueByFieldName(updatedSymptom, modifiedFields),
-    //         ModifiedDate = DateTime.Now
-    //     };
-    //
-    //     await _symptomHistoryCollection.InsertOneAsync(history);
-    // }
-    //
-    // private string GetValueByFieldName(Symptom symptom, string fieldName)
-    // {
-    //     switch (fieldName)
-    //     {
-    //         case "SeverityScale":
-    //             return symptom.SeverityScale.ToString();
-    //         // case "SymptomDurationHours":
-    //         //     return symptom.SymptomDurationHours.ToString();
-    //         
-    //         default:
-    //             return null;
-    //     }
-    // }
-    //
-    // private string CompareSymptoms(Symptom oldSymptom, Symptom updatedSymptom)
-    // {
-    //     var modifiedFields = new StringBuilder();
-    //     
-    //     if (oldSymptom.SeverityScale != updatedSymptom.SeverityScale)
-    //         modifiedFields.Append("SeverityScale,");
-    //     // if (oldSymptom.SymptomDurationHours != updatedSymptom.SymptomDurationHours)
-    //     //     modifiedFields.Append("SymptomDurationHours,");
-    //     
-    //     return modifiedFields.ToString().TrimEnd(',');
-    // }
 }

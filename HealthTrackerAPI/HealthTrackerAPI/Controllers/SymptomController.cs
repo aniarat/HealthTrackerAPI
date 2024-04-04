@@ -1,6 +1,6 @@
 ﻿using Grpc.Core;
 using HealthTrackerAPI.Models;
-using HealthTrackerAPI.Repositories;
+using HealthTrackerAPI.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -12,13 +12,10 @@ namespace HealthTrackerAPI.Controllers;
 public class SymptomController : ControllerBase
 {
     private readonly ISymptomService _symptomService;
-    //private readonly ISymptomHistoryService _symptomHistoryService;
-
 
     public SymptomController(ISymptomService symptomService)
     {
         this._symptomService = symptomService;
-        //this._symptomHistoryService = symptomHistoryService;
     }
 
 

@@ -1,7 +1,7 @@
 ﻿using HealthTrackerAPI.Models;
 using MongoDB.Driver;
 
-namespace HealthTrackerAPI.Repositories;
+namespace HealthTrackerAPI.Services;
 
 public interface ISymptomService
 {
@@ -11,6 +11,5 @@ public interface ISymptomService
     public Task UpdateSymptomAsync(string symptomId, SymptomDto symptom);
     public Task<DeleteResult> DeleteSymptomAsync(string symptomId);
     public Task<List<SymptomHistory>> GetSymptomHistoryAsync();
-    
     Task<List<SymptomHistory>> GetSymptomHistoryByIdAsync(string symptomId);
 }

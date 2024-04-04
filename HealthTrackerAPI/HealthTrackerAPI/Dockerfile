@@ -9,7 +9,7 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["HealthTrackerAPI/HealthTrackerAPI.csproj", "HealthTrackerAPI/"]
 RUN dotnet restore "HealthTrackerAPI/HealthTrackerAPI.csproj"
-COPY . .
+COPY . . 
 WORKDIR "/src/HealthTrackerAPI"
 RUN dotnet build "HealthTrackerAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

@@ -1,7 +1,6 @@
 ﻿using Grpc.Core;
 using HealthTrackerAPI.Models;
 using HealthTrackerAPI.Repositories;
-using HealthTrackerAPI.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
